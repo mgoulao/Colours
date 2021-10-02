@@ -1,0 +1,17 @@
+{
+    "short_name": "Colours",
+    "name": "Colours",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "logo_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "background_color": "#000",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#000",
+    "description": "Lights"
+}
