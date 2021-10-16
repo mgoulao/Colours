@@ -29,6 +29,11 @@
 			return false;
 		});
 
+		document.addEventListener('click', (event) => {
+			showColorPicker = false;
+		});
+
+
 	});
 
 	let lightProps: LightProperties;
@@ -52,10 +57,7 @@
 
     const onColorInputFocus = (event) => {
         showColorPicker = true;
-    }
-
-    const onColorInputUnfocus = (event) => {
-        showColorPicker = false;
+		event.stopPropagation();
     }
 
 	const onColorInputChange = (event) => {
@@ -141,9 +143,9 @@
 				max="100"
 			/>
 		</div>
-		<div class="controller__item">
+		<div class="controller__item" on:click={onColorInputFocus} >
 			<h5 class="controler-item__title">Color</h5>
-			<input id="base-color-input" value={lightProps.color} on:focus={onColorInputFocus} on:blur={onColorInputUnfocus} on:change={onColorInputChange} />
+			<input id="base-color-input" value={lightProps.color} on:change={onColorInputChange} />
             {#if showColorPicker}
                 <HsvPicker on:colorChange={onColorPickerChange} startColor={'#FBFBFB'} />
             {/if}
