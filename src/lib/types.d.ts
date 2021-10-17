@@ -12,4 +12,5 @@ export interface LightProperties {
 	color: string;
 	type: string;
 	size: number;
+	bpm: number;
 }

@@ -402,6 +402,7 @@
 
 <style>
 	.main-container {
+		position: absolute;
 		width: 240px;
 		height: 265px;
 		background: #f2f2f2;

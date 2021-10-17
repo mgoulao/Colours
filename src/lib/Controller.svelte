@@ -71,6 +71,19 @@
 	const onSizeChange = (event) => {
 		lightStore.setSize(event.target.value);
 	};
+	
+	const onPlayStopClick = (event) => {
+		if (lightProps.playing) {
+			lightStore.stop();
+		} else {
+			lightStore.play();
+		}
+	}
+
+	const onBPMChange = (event) => {
+		lightStore.setBPM(event.target.value);
+	};
+
 
 	const onFullScreenClick = () => {
 		toggleFullScreen();
@@ -138,7 +151,7 @@
 				id="size-slider"
 				on:input={onSizeChange}
 				name="size"
-				value="100"
+				value={lightProps.size}
 				min="10"
 				max="100"
 			/>
@@ -147,8 +160,33 @@
 			<h5 class="controler-item__title">Color</h5>
 			<input id="base-color-input" value={lightProps.color} on:change={onColorInputChange} />
             {#if showColorPicker}
-                <HsvPicker on:colorChange={onColorPickerChange} startColor={'#FBFBFB'} />
+                <HsvPicker on:colorChange={onColorPickerChange} startColor={lightProps.color} />
             {/if}
+		</div>
+		<div class="controller__item">
+			<h5 class="controler-item__title">Animation</h5>
+			<button id="play_btn" on:click={onPlayStopClick}>{#if lightProps.playing}Stop{:else}Play{/if}</button>
+			<div class="controller__horizontal">
+				<span>BPM</span>
+				<span>{lightProps.bpm}</span>
+			</div>
+			<input
+                class="controler__range-input"
+				type="range"
+				id="bpm-slider"
+				on:input={onBPMChange}
+				name="bpm"
+				value={lightProps.bpm}
+				min="10"
+				max="150"
+			/>
+			<div class="controller_animation-track">
+				<input id="base-color-input" value={lightProps.color} on:change={onColorInputChange} />
+				{#if showColorPicker}
+					<HsvPicker on:colorChange={onColorPickerChange} startColor={lightProps.color} />
+				{/if}
+				<button>Add</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -199,4 +237,7 @@
         width: 100%;
     }
 
+	.controller__horizontal {
+		color: #fff
+	}
 </style>

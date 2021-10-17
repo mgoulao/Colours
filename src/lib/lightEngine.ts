@@ -6,6 +6,7 @@ export class LightEngine {
 	store: LightStore;
 	state: LightProperties;
 	ctx: CanvasRenderingContext2D;
+	lastFrameTime = 0;
 
 	constructor(canvas: HTMLCanvasElement, store: LightStore) {
 		this.canvas = canvas;
@@ -14,7 +15,8 @@ export class LightEngine {
 		this.ctx = this.canvas.getContext('2d');
 		this.ctx.canvas.width = window.innerWidth;
 		this.ctx.canvas.height = window.innerHeight;
-		this.startPlay();
+
+		this.createFrame();
 		this.setupListeners();
 	}
 
@@ -22,7 +24,7 @@ export class LightEngine {
 		window.addEventListener('resize', () => {
 			this.ctx.canvas.width = window.innerWidth;
 			this.ctx.canvas.height = window.innerHeight;
-			this.startPlay();
+			this.createFrame();
 		});
 	}
 
@@ -72,20 +74,36 @@ export class LightEngine {
             }
 		}
 
-		if (this.state.playing) {
-			//
-		}
-		//window.requestAnimationFrame(this.createFrame);
 	};
 
+	play(): void {
+		const currentFrameTime = Date.now();
+		if (Date.now() - this.lastFrameTime > 1000/(this.state.bpm/60)) {
+			this.lastFrameTime = currentFrameTime;
+			this.createFrame();
+			console.log(Date.now());
+		}
+		
+		if (this.state.playing) {
+			window.requestAnimationFrame(this.play.bind(this));
+		}
+	}
+
 	startPlay(): void {
-		window.requestAnimationFrame(this.createFrame);
+		window.requestAnimationFrame(this.play.bind(this));
 	}
 
 	onStoreChanges = (value: LightProperties): void => {
+		const wasPlaying = this.state?.playing;
 		this.state = value;
 		if (value.changed) {
-			if (!this.state.playing) window.requestAnimationFrame(this.createFrame);
+			if (!wasPlaying){
+				if (this.state.playing) {
+					this.startPlay();
+				} else {
+					window.requestAnimationFrame(this.createFrame);
+				}
+			}
 		}
 	};
 }
